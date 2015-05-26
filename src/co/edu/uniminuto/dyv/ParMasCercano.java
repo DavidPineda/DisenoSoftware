@@ -7,7 +7,6 @@
  */
 package co.edu.uniminuto.dyv;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
