@@ -5,6 +5,7 @@
  */
 package co.edu.uniminuto.main;
 
+import co.edu.uniminuto.backTraking.SumaMinima;
 import co.edu.uniminuto.dyv.ParMasCercano;
 import co.edu.uniminuto.dyv.Punto;
 import co.edu.uniminuto.pd.Caminos;
@@ -28,12 +29,16 @@ public class MenuProyecto {
         System.out.println("Seleccione alguna de las siguientes opciones:");
         System.out.println("1) Par Mas Cercano (Divide y Venceras)");
         System.out.println("2) Camino Mas Corto (Programacion Dinamica)");
+        System.out.println("3) Suma Minima (BackTraking)");
         switch (s.nextInt()) {
             case 1:
                 divideYvenceras();
                 break;
             case 2:
                 programacionDinamica();
+                break;
+            case 3:
+                backTraking();
                 break;
             default:
                 menuPrincipal();
@@ -251,18 +256,8 @@ public class MenuProyecto {
             Caminos camino = new Caminos(origen, destino);
             camino.programacionDinamica(ciudades);
             System.out.println("0) para continuar, 1) Terminar");
-            res = s.nextInt();
+            res = s.nextInt();            
         }       
-    }
-
-    private String destinos(Ciudad[] ciudades, Ciudad c) {
-        String destinos = "";
-        for (Ciudad c1 : ciudades) {
-            if (!c1.getNombre().equals(c.getNombre()) && !destinoInArray(c.getDestinos(), c1.getNombre())) {
-                destinos += c1.getNumCiudad() + ") " + c1.getNombre() + "\n";
-            }
-        }
-        return destinos;
     }
     
     private String destinos(Ciudad[] ciudades) {
@@ -297,6 +292,12 @@ public class MenuProyecto {
             }
         }
         return false;
+    }
+    
+    private void backTraking(){
+        System.out.println("Ingrese la cantidad n de la matriz");
+        int n = s.nextInt();
+        SumaMinima s = new SumaMinima(n);
     }
 
     public static void main(String[] args) {
