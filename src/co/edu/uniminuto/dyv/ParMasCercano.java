@@ -25,6 +25,7 @@ public class ParMasCercano {
         Arrays.sort(puntos, new OrdenPointX());
         // Se obtiene el par de puntos con menor distancia
         ParPuntos dmin = divideYvenceras(puntos, 0, puntos.length - 1);
+        pintarPuntos(puntos);
         return "El par de puntos mas cercano es: " + dmin.toString();
     }
 
@@ -118,6 +119,12 @@ public class ParMasCercano {
         return parOrigen;
     }
 
+    private void pintarPuntos(Punto[] puntos){
+        for(Punto p: puntos){
+            System.out.println(p.toString());
+        }
+    }
+    
     /**
      * Clase que implementa la interfaz Comparator para realizar la ordenacion
      * del array por la posicion x del punto

@@ -11,116 +11,55 @@ package co.edu.uniminuto.backTraking;
  */
 public class SumaMinima {
 
-    int[][] matriz;
     int n;
+    int[] solucionFinal;
 
     public SumaMinima(int n) {
         this.n = n;
-        armarMatriz();
-        backTraking();
+        this.solucionFinal = new int[n * n];
     }
 
-    private void armarMatriz() {
-        matriz = new int[n][n];
-        for (int[] array : matriz) {
-            for (int i = 0; i < array.length; i++) {
-                array[i] = -1;
-            }
+    public void backTraking() {
+        for (int i = 0; i < this.solucionFinal.length; i++) {
+            this.solucionFinal[i] = n * n + 1;
         }
-    }
-
-    private void backTraking() {
-        //for (int[] array : matriz) {
         int[] solucion = new int[n * n];
-        int[] solucionFinal = new int[n * n];
-        backTraking(solucion, 0, solucionFinal);
-        String s = "";
-        //}
+        backTraking(solucion, 0);
+        imprimirMatriz();
     }
 
     /**
-     * Utiliza el algoritmo de BackTraking para determinar la cantidad de
-     * valores minimos a agregar a la matriz
-     *
-     * @param array Array Solucion
-     * @param etapa Etapa dentro del arbol
-     * @return Valor True o False indicando que se encontro solucion o no
-     * respectivamente
+     * Metodo Princial en el cual se aplica el algoritmo de Backtraking para encontrar las combinaciones
+     * @param solucion Arreglo con la mejor Solucion Actual
+     * @param etapa El nivel de profundidad en el que se encuentra el algoritmo
      */
-    /*private void backTraking(int solucion[], int etapa, int[] solucionFInal) {
-     if (etapa > solucion.length - 1) {
-     return; // No se encontro Solucion
-     }
-     int numero = 1;
-     do {
-     solucion[etapa] = numero; // Se selecciona una nueva opcion
-     if (validaPosicion(solucion, etapa, numero)) {
-     if (etapa == solucion.length - 1) {
-     actualizarSolucion(solucion, solucionFInal);
-     } else {
-     backTraking(solucion, etapa + 1, solucionFInal);
-     }
-     }
-     numero++;
-     } while (solucion[etapa] != n*n);
-     }*/
-    private void backTraking(int solucion[], int etapa, int[] solucionFinal) {
+    private boolean backTraking(int solucion[], int etapa) {
         if (etapa > (n * n) - 1) {
-            return; // No se encontro Solucion
+            return false; // No se encontro Solucion
         }
         int numero = 1;
+        boolean exito = false;
         do {
-            solucion[etapa] = numero; // Se selecciona una nueva opcionF
-            if (validarPosicionFila(solucion, etapa) && validaPosicionColumna(solucion, etapa)) {
+            solucion[etapa] = numero; // Se selecciona una nueva opcion
+            if (validarPosicionFila(solucion, etapa) && validaPosicionColumna(solucion, etapa) && validarPosicionDiagonal(solucion, etapa)) {
                 if (etapa == solucion.length - 1) {
-                    solucionFinal = actualizarSolucion(solucion, solucionFinal);
+                    actualizarSolucion(solucion); // Se actualiza la solucion si la nueva es mejor
+                    exito = true;
                 } else {
-                    backTraking(solucion, etapa + 1, solucionFinal);
+                    exito = backTraking(solucion, etapa + 1); // Se realiza la llamada recursiva para bajar un nivel mas en el arbol
                 }
             }
             numero++;
-        } while (solucion[etapa] != (n * n));
+        } while (solucion[etapa] != (n+n) && !exito);
+        return exito;
     }
 
-    private int[] actualizarSolucion(int solucion[], int solucionFinal[]) {
-        int sumaInicial = 0, sumaFinal = 0;
-        for (int i = 0; i < solucion.length; i++) {
-            sumaInicial += solucion[i];
-            sumaFinal += solucionFinal[i];
-        }
-        if (sumaFinal < sumaInicial) {
-            solucionFinal = (int[]) solucion.clone();
-        }        
-        return solucionFinal;
-    }
-
-    /*private boolean backTraking(int array[], int etapa) {
-     if (etapa > n - 1) {
-     return false; // No se encontro Solucion
-     }
-     boolean exito = false;
-     array[etapa] = -1;
-     do {
-     array[etapa] = array[etapa] + 1; // Se selecciona una nueva opcion
-     if (validaPosicion(array, etapa)) {
-     if (etapa != n - 1) {
-     exito = backTraking(array, etapa + 1);
-     } else {
-     exito = true;
-     }
-     }
-     } while (array[etapa] != n - 1 && !exito);
-
-     return exito;
-     }*/
     /**
-     * Valida si una posicion es valida respecto a la diagonal y la fila de
-     * manera que el valor no se repita en dichas ubicaciones
+     * Permite Validar que en ninguna columna se repitan numeros
      *
-     * @param array El array solucion temporal
-     * @param k la etapa en la cual se esta evaluando
-     * @return valor true si el numero es valido en la posicion, de lo contrario
-     * false
+     * @param solucion Mejor Solucion Actual
+     * @param k Posicion del valor que se esta validando
+     * @return Verdadero si el valor es valido para la columna
      */
     private boolean validaPosicionColumna(int[] solucion, int k) {
         for (int i = 0; i < k; i++) {
@@ -129,13 +68,17 @@ public class SumaMinima {
                     return false;
                 }
             }
-            /*if (array[k] || array[i] == array[k] || ((valAbs(array[i], array[k]) == valAbs(i, k) && array[k] == numero))) {
-             return false;
-             }*/
         }
         return true;
     }
 
+    /**
+     * Permite Validar que en ninguna fila se repitan numeros
+     *
+     * @param solucion Mejor Solucion Actual
+     * @param k Posicion del valor que se esta validando
+     * @return Verdadero si el valor es valido para la fila
+     */
     private boolean validarPosicionFila(int[] solucion, int k) {
         for (int i = 0; i < solucion.length; i = i + n) {
             if ((i + n) > k) {
@@ -150,13 +93,68 @@ public class SumaMinima {
     }
 
     /**
-     * Retorna el valor absoluto de la resta entre x y y (x-y)
+     * Permite Validar que en ninguna diagonal se repitan numeros
      *
-     * @param x Valor del cual se restara
-     * @param y Valor a restar
-     * @return Valor absoluto de la division
+     * @param solucion Mejor Solucion Actual
+     * @param k Posicion que se esta validando
+     * @return Verdadero si el valor es valido para la diagonal
      */
-    private int valAbs(int x, int y) {
-        return Math.abs(x - y);
+    private boolean validarPosicionDiagonal(int[] solucion, int k) {
+        int filaI = 0, colJ = 0, filaJ = 0, colI = k;
+        for (int i = n; i < solucion.length; i = i + n) { // Se obtiene la fila en el array de K
+            if (k >= i) {
+                filaI++; // Fila donde se encuentra la varable K en el arreglo
+            } else {
+                break;
+            }
+        }
+        if (k >= n) {
+            colI = k % n; // Se obtienen la Columna en el array de K
+        }
+        for (int i = 0; i < k; i++) {
+            if (Math.abs(filaI - filaJ) == Math.abs(colI - colJ) && solucion[k] == solucion[i]) {
+                return false;
+            }
+            colJ++;
+            if (i >= n - 1 && (i + 1) % n == 0) {
+                filaJ++;
+                colJ = 0;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Permite realizar la actualizacion del arraglo solucion
+     *
+     * @param solucion Array con la mejor solucion actual
+     */
+    private void actualizarSolucion(int solucion[]) {
+        int sumaInicial = 0, sumaFinal = 0;
+        for (int i = 0; i < solucion.length; i++) {
+            sumaInicial += solucion[i];
+            sumaFinal += this.solucionFinal[i];
+        }
+        if (sumaInicial < sumaFinal) {
+            this.solucionFinal = (int[]) solucion.clone();
+        }
+    }
+
+    private void imprimirMatriz() {
+        for (int i = 0; i < this.solucionFinal.length; i = i + n) {
+            for (int j = i; j < i + n; j++) {
+                System.out.print("[" + this.solucionFinal[j] + "]");
+            }
+            System.out.println("");
+        }
+    }
+    
+    private boolean validarFinal(int[] solucion, int etapa){
+        for(int i = 0; i < solucion.length; i++){
+            if(solucion[i] > etapa){
+                return false;
+            }
+        }
+        return true;
     }
 }

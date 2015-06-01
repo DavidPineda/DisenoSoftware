@@ -5,6 +5,8 @@
  */
 package co.edu.uniminuto.dyv;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author david
@@ -51,6 +53,12 @@ public class Punto {
         double px = punto.getX() - this.getX();
         double py = punto.getY() - this.getY();
         return Math.sqrt(px * px + py * py);
+    }
+
+    @Override
+    public String toString() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return "[(" + df.format(this.getX()) + " - " + df.format(this.getY()) + ")]";
     }
 
 }

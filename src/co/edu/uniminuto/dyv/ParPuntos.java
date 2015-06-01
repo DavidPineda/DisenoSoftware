@@ -3,7 +3,7 @@
  */
 package co.edu.uniminuto.dyv;
 
-import java.awt.Point;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -53,6 +53,7 @@ public class ParPuntos {
 
     @Override
     public String toString() {
-        return "[(" + puntoA.getX() + "," + puntoA.getY() + "),(" + puntoB.getX() + "," + puntoB.getY() + ")]";
+        DecimalFormat df = new DecimalFormat("#.##");
+        return "[(" + df.format(puntoA.getX()) + " - " + df.format(puntoA.getY()) + ") <-> (" + df.format(puntoB.getX()) + " - " + df.format(puntoB.getY()) + ")]";
     }
 }
