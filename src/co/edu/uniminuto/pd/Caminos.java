@@ -56,8 +56,9 @@ public class Caminos {
         }
         System.out.println("Matriz Original");
         imprimirMatriz(matrizCaminos);
-        programacionDinamica(matrizCaminos);
-        System.out.println("Matriz Afectada Por Algoritmo Programacion Dinamica");
+        //programacionDinamica(matrizCaminos);
+        //System.out.println("Matriz Afectada Por Algoritmo Programacion Dinamica");
+        System.out.println("");
         imprimirMatriz(matrizCaminos);
     }
 
@@ -70,7 +71,7 @@ public class Caminos {
                     } else if (matrizCaminos[f][c] instanceof Destino) {
                         System.out.print("[" + ((Destino) matrizCaminos[f][c]).getCoste() + " : " + ((Destino) matrizCaminos[f][c]).getTiempo() + "], ");
                     } else {
-                        System.out.print("[" + (int) matrizCaminos[f][c] + "]");
+                        System.out.print("[" + (int) matrizCaminos[f][c] + "], ");
                     }
                 } else {
                     System.out.print("[NULL], ");
