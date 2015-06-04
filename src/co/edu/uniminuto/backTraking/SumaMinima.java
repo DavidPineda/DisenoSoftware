@@ -29,29 +29,29 @@ public class SumaMinima {
     }
 
     /**
-     * Metodo Princial en el cual se aplica el algoritmo de Backtraking para encontrar las combinaciones
+     * Metodo Princial en el cual se aplica el algoritmo de Backtraking para
+     * encontrar las combinaciones
+     *
      * @param solucion Arreglo con la mejor Solucion Actual
      * @param etapa El nivel de profundidad en el que se encuentra el algoritmo
      */
-    private boolean backTraking(int solucion[], int etapa) {
+    private void backTraking(int solucion[], int etapa) {
         if (etapa > (n * n) - 1) {
-            return false; // No se encontro Solucion
+            return; // No se encontro Solucion
         }
         int numero = 1;
-        boolean exito = false;
         do {
             solucion[etapa] = numero; // Se selecciona una nueva opcion
             if (validarPosicionFila(solucion, etapa) && validaPosicionColumna(solucion, etapa) && validarPosicionDiagonal(solucion, etapa)) {
                 if (etapa == solucion.length - 1) {
                     actualizarSolucion(solucion); // Se actualiza la solucion si la nueva es mejor
-                    exito = true;
+                    validarFinal(etapa);
                 } else {
-                    exito = backTraking(solucion, etapa + 1); // Se realiza la llamada recursiva para bajar un nivel mas en el arbol
+                    backTraking(solucion, etapa + 1); // Se realiza la llamada recursiva para bajar un nivel mas en el arbol
                 }
             }
             numero++;
-        } while (solucion[etapa] != (n+n) && !exito);
-        return exito;
+        } while (solucion[etapa] < (n + n));
     }
 
     /**
@@ -135,8 +135,16 @@ public class SumaMinima {
             sumaInicial += solucion[i];
             sumaFinal += this.solucionFinal[i];
         }
+        /*for (int i = 0; i < solucion.length; i++) {
+         System.err.print("[" + solucion[i] + "]");
+         }
+         System.err.println("");*/
         if (sumaInicial < sumaFinal) {
             this.solucionFinal = (int[]) solucion.clone();
+            /*for (int i = 0; i < solucionFinal.length; i++) {
+             System.out.print("[" + solucionFinal[i] + "]");
+             }
+             System.out.println("");*/
         }
     }
 
@@ -148,10 +156,10 @@ public class SumaMinima {
             System.out.println("");
         }
     }
-    
-    private boolean validarFinal(int[] solucion, int etapa){
-        for(int i = 0; i < solucion.length; i++){
-            if(solucion[i] > etapa){
+
+    private boolean validarFinal(int etapa) {
+        for (int i = 0; i < solucionFinal.length; i++) {
+            if (solucionFinal[i] > etapa) {
                 return false;
             }
         }

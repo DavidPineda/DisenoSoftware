@@ -38,8 +38,14 @@ public class Caminos {
         this.destino = destino;
         this.camino = new ArrayList<>();
     }
+    
+    public Caminos(){
+        this.origen = null;
+        this.destino = null;
+        this.camino = new ArrayList<>();
+    }
 
-    public void programacionDinamica(Ciudad[] ciudades) {
+    public Object[][] generarMatrizCaminos(Ciudad[] ciudades) {
         Object[][] matrizCaminos = new Object[ciudades.length + 1][ciudades.length + 1];
         for (int f = 0; f < matrizCaminos.length; f++) {
             for (int c = 0; c < matrizCaminos[0].length; c++) {
@@ -54,22 +60,17 @@ public class Caminos {
                 }
             }
         }
-        System.out.println("Matriz Original");
-        imprimirMatriz(matrizCaminos);
-        //programacionDinamica(matrizCaminos);
-        //System.out.println("Matriz Afectada Por Algoritmo Programacion Dinamica");
-        System.out.println("");
-        imprimirMatriz(matrizCaminos);
+        return matrizCaminos;
     }
 
-    private void imprimirMatriz(Object[][] matrizCaminos) {
+    public void imprimirMatriz(Object[][] matrizCaminos) {
         for (int f = 0; f < matrizCaminos.length; f++) {
             for (int c = 0; c < matrizCaminos[0].length; c++) {
                 if (matrizCaminos[f][c] != null) {
                     if (matrizCaminos[f][c] instanceof Ciudad) {
                         System.out.print("[" + ((Ciudad) matrizCaminos[f][c]).getNombre() + "], ");
                     } else if (matrizCaminos[f][c] instanceof Destino) {
-                        System.out.print("[" + ((Destino) matrizCaminos[f][c]).getCoste() + " : " + ((Destino) matrizCaminos[f][c]).getTiempo() + "], ");
+                        System.out.print("[" + ((Destino) matrizCaminos[f][c]).getCoste() + "], ");
                     } else {
                         System.out.print("[" + (int) matrizCaminos[f][c] + "], ");
                     }
@@ -97,7 +98,7 @@ public class Caminos {
         return null;
     }
 
-    private void programacionDinamica(Object[][] matriz) {
+    public void programacionDinamica(Object[][] matriz) {
         for (int k = 1; k < matriz.length; k++) {
             for (int i = 1; i < matriz.length; i++) {
                 for (int j = 1; j < matriz.length; j++) {
@@ -109,6 +110,7 @@ public class Caminos {
     }
 
     private void caminoCorto(Object[][] matriz) {
+        camino.clear();
         camino.add(getOrigen());
         boolean valor = true;
         Ciudad copiaOrigen = getOrigen();

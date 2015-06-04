@@ -91,6 +91,49 @@ public class MenuProyecto {
         System.out.println("Ingrese la cantidad de ciudades");
         int cantCiudades = s.nextInt();
         Ciudad[] ciudades = new Ciudad[cantCiudades];
+        System.out.println("1) Para ingresar Costes Aleatorios.\n2) Para ingresar Coste Manual");
+        switch (s.nextInt()) {
+            case 1:
+                cargarCiudadesAleatorio(ciudades);
+                break;
+            case 2:
+                cargarCiudadesManual(ciudades);
+                break;
+            default:
+                cargarCiudadesAleatorio(ciudades);
+                break;
+        }
+        int res = 0;
+        Caminos camino = new Caminos();
+        System.out.println("Matriz Original");
+        Object[][] matriz = camino.generarMatrizCaminos(ciudades);
+        camino.imprimirMatriz(matriz);
+        while (res == 0) {
+            System.out.println("Seleccione la ciudad Origen\n");
+            System.out.println(destinos(ciudades));
+            Ciudad origen = ciudadDestino(s.nextInt(), ciudades);
+            System.out.println("Seleccione la ciudad Destino\n");
+            System.out.println(destinos(ciudades));
+            Ciudad destino = ciudadDestino(s.nextInt(), ciudades);
+            camino.setOrigen(origen);
+            camino.setDestino(destino);
+            camino.programacionDinamica(matriz);
+            System.out.println("0) para continuar, 1) Terminar");
+            res = s.nextInt();
+        }
+    }
+
+    private void cargarCiudadesAleatorio(Ciudad[] ciudades) {
+        for (int i = 0; i < ciudades.length; i++) {
+            System.out.println("Ingrese el Nombre de la Ciudad # " + (i + 1));
+            ciudades[i] = new Ciudad(s.next(), ciudades.length - 1, i);
+        }
+        for (Ciudad c : ciudades) {
+            c.setDestinos(destinoAleatorio(ciudades, c));
+        }
+    }
+
+    private void cargarCiudadesManual(Ciudad[] ciudades) {
         String nombre = "";
         int cantDestinos = 0;
         for (int i = 0; i < ciudades.length; i++) {
@@ -122,21 +165,6 @@ public class MenuProyecto {
                 }
             }
         }
-
-        int res = 0;
-        while (res == 0) {
-            System.out.println("Seleccione la ciudad Origen\n");
-            System.out.println(destinos(ciudades));
-            Ciudad origen = ciudadDestino(s.nextInt(), ciudades);
-            System.out.println("Seleccione la ciudad Destino\n");
-            System.out.println(destinos(ciudades));
-            Ciudad destino = ciudadDestino(s.nextInt(), ciudades);
-            Caminos camino = new Caminos(origen, destino);
-            camino.programacionDinamica(ciudades);
-            System.out.println("0) para continuar, 1) Terminar");
-            res = s.nextInt();
-        }
-
     }
 
     private String destinos(Ciudad[] ciudades, Ciudad c) {
@@ -144,6 +172,18 @@ public class MenuProyecto {
         for (Ciudad c1 : ciudades) {
             if (!c1.getNombre().equals(c.getNombre()) && !destinoInArray(c.getDestinos(), c1.getNombre())) {
                 destinos += c1.getNumCiudad() + ") " + c1.getNombre() + "\n";
+            }
+        }
+        return destinos;
+    }
+
+    private Destino[] destinoAleatorio(Ciudad[] ciudades, Ciudad c) {
+        Destino[] destinos = new Destino[c.getDestinos().length];
+        Random costeTiempo = new Random();
+        int cont = 0;
+        for (Ciudad c1 : ciudades) {
+            if (c.getNumCiudad() != c1.getNumCiudad()) {
+                destinos[cont++] = new Destino(c1, (int) (costeTiempo.nextDouble() * 200 + 0), (int) (costeTiempo.nextDouble() * 50 + 1));
             }
         }
         return destinos;
